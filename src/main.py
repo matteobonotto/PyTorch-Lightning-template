@@ -9,9 +9,9 @@ from torch.utils.data import dataloader
 def Conv2dEncoderBlock(nn):
     def __init__(
             self,
-            in_channels: int = 3,
-            out_channels,
-            kernel_size):
+            in_channels: int = 1,
+            out_channels: int = 1,
+            kernel_size: int = 3):
         super(Conv2dEncoderBlock,self).__init__()   
         self.conv2d = nn.Conv2d(
             in_channels=in_channels, 
