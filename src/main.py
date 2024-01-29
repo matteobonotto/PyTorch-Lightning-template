@@ -1,12 +1,12 @@
 import numpy as np
 import pytorch_lightning as pl
-from torch import nn
+from torch import nn, Tensor
 from torch.utils.data import dataloader
 
 # from typing import 
 
 
-def Conv2dEncoderBlock(nn):
+class Conv2dEncoderBlock(nn.Module):
     def __init__(
             self,
             in_channels: int = 1,
@@ -20,20 +20,36 @@ def Conv2dEncoderBlock(nn):
         self.maxpool2d = nn.MaxPool2d(kernel_size=2)
         self.activation = nn.ReLU()
 
-    def forward(self,x):
-        return self.activation(self.maxpool2d(self.conv2d))
+    def forward(self,x: Tensor):
+        return self.activation(self.maxpool2d(self.conv2d(x)))
+    
 
-def SimplePytorchModel(nn):
-    def __init__(self):
+
+class SimplePytorchModel(nn.Module):
+    def __init__(
+            self,
+            image_sizes: list,
+            channel_in_list:list = [3,8,16],
+            channel_out_list: list = [8,16,32]):
         super(SimplePytorchModel,self).__init__()
 
-        self.conv2d_1 = nn.Conv2d(in_channels=3, out_channels=8, kernel_size=3)
-        self.conv2d_2 = nn.Conv2d(in_channels=8, out_channels=16, kernel_size=3)
-        self.conv2d_3 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3)
-        self.maxpool1 = nn.MaxPool2d(kernel_size=2)
-        self.maxpool2 = nn.MaxPool2d(kernel_size=2)
-        self.maxpool3 = nn.MaxPool2d(kernel_size=2)
-        self.activation_1
+        module_list = []
+
+        for in_channels, out_channels in zip(channel_in_list,channel_out_list):
+            module_list.append(self.Conv2dEncoderBlock(
+                in_channels=in_channels,
+                out_channels=out_channels
+            ))
+        module_list.append([
+            nn.Linear(in_features=1, out_features=100),
+            nn.GELU(),
+            nn.Linear(in_features=100, out_features=1),
+            nn.GELU()
+        ])
+        self.layer_list = nn.ModuleList(module_list)
+
+
+
     
 
 def main():
