@@ -1,8 +1,12 @@
 import numpy as np
 import pytorch_lightning as pl
+import torch
 from torch import nn, Tensor
-from torch.utils.data import dataloader
-
+from torch.utils.data import DataLoader
+from torch.utils.data import TensorDataset
+from torch import optim
+from time import time
+import pandas as pd
 # from typing import 
 
 
@@ -48,17 +52,104 @@ class SimplePytorchModel(nn.Module):
         ])
         self.layer_list = nn.ModuleList(module_list)
 
-
-
+    def forward(self,x):
+        for layer in self.layer_list:
+            x = layer(x)
+        return x
+    
+    
+    def dataloader(self,X,y,batch_size):
+        return DataLoader(
+            TensorDataset(
+                torch.tensor(X,device=self.device,dtype=self.dtype),
+                torch.tensor(y,device=self.device,dtype=self.dtype)),
+            shuffle=True,
+            batch_size=batch_size)
     
 
+    def train_iteration(
+        self,
+        X,
+        y
+        ):
+        """
+        This method implements a single training iteration
+
+        :param X: input data
+        :param y: target data
+        :return: loss and predictions
+
+        """
+        # Backpropagation
+        self.optimizer.zero_grad(set_to_none=True)
+        # Compute prediction and error
+        pred = self(X)
+        loss = self.loss_p(pred, y)
+        loss.backward()
+        self.optimizer.step()
+        return loss, pred
+
+    
+    def fit(self,X,y,epochs=50,batch_size=32,N_print=0):
+        train_loader = self.dataloader(
+            X,y,
+            batch_size=batch_size)
+        n_steps = len(train_loader)
+
+        self.optimizer = optim.AdamW( # Adam with weight decay
+            self.parameters(), 
+            weight_decay=self.L2regularization)
+
+        loss_values = []
+        time_start = time.time()
+        for epoch in range(epochs):
+            # Loop over the dataset multiple times
+            running_loss = 0.0
+            time_epoch_start = time.time()
+            for i, (X, y) in enumerate(train_loader):
+                X, y = X.to(self.device), y.to(self.device)
+                # Perform single training step
+                loss, _ = self.train_iteration(X, y)
+                running_loss += loss.item()
+                # Print every N_print mini-batches
+                if i % N_print == (N_print - 1):
+                    print('epoch: {}/{} batch: {}/{} loss: {:4.3f}'.format(
+                        epoch,
+                        epochs,
+                        i + 1,
+                        n_steps,
+                        running_loss / i))
+            loss_values.append(running_loss / n_steps)
+
+            time_epoch_end = time.time() - time_epoch_start
+            print.info('elapsed time per epoch: {:4.3f}'.format(time_epoch_end))
+        self.time_training_end = time.time() - time_start
+        print('Finished Training')
+        print('Training took {:4.3f}s'.format(self.time_training_end))
+
+        return loss_values
+
+
+def prepare_data(path):
+    data = pd.read_csv(path, low_memory=False).to_numpy().reshape((28,28))
+    data_tensor = 
+    
+
+class FashionMnistPreproc():
+    def __init__(self):
+        pass
+
+
+
 def main():
-    model = SimplePytorchModel()
+    path = r'./data/fashion-mnist/fashion-mnist_train.csv'
+    data = prepare_data(path)
+    # model = SimplePytorchModel()
     # datapipe = DataPipe()
 
-    pl.Trainer(
-        model=model,
-        datapipe=datapipe)
+    # pl.Trainer(
+    #     model=model,
+    #     datapipe=None)
 
 
 
