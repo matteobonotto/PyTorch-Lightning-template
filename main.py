@@ -27,11 +27,11 @@ class Conv2dEncoderBlock(nn.Module):
     def forward(self,x: Tensor):
         return self.activation(self.maxpool2d(self.conv2d(x)))
     
-
+ 
 
 class SimplePytorchModel(nn.Module):
     def __init__(
-            self,
+            self, 
             dims: list,
             channel_in_list:list = [3,8,16],
             channel_out_list: list = [8,16,32]):
