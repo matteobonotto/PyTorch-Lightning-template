@@ -131,8 +131,13 @@ class SimplePytorchModel(nn.Module):
 
 
 def prepare_data(path):
-    data = pd.read_csv(path, low_memory=False).to_numpy().reshape((28,28))
-    data_tensor = 
+    data = pd.read_csv(path, low_memory=False).to_numpy()
+    
+    dims = data.shape
+    dims = [dims[0], np.sqrt(dims[1]), np.sqrt(dims[1])]
+    
+    # .reshape((28,28))
+    # data_tensor = 
     
 
 class FashionMnistPreproc():
