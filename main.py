@@ -57,7 +57,7 @@ class SimplePytorchModel(nn.Module):
             x = layer(x)
         return x
     
-    
+     
     def dataloader(self,X,y,batch_size):
         return DataLoader(
             TensorDataset(
