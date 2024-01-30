@@ -32,7 +32,7 @@ class Conv2dEncoderBlock(nn.Module):
 class SimplePytorchModel(nn.Module):
     def __init__(
             self,
-            image_sizes: list,
+            dims: list,
             channel_in_list:list = [3,8,16],
             channel_out_list: list = [8,16,32]):
         super(SimplePytorchModel,self).__init__()
@@ -132,13 +132,11 @@ class SimplePytorchModel(nn.Module):
 
 def prepare_data(path):
     data = pd.read_csv(path, low_memory=False).to_numpy()
-    
-    dims = data.shape
-    dims = [dims[0], np.sqrt(dims[1]), np.sqrt(dims[1])]
-    
-    # .reshape((28,28))
-    # data_tensor = 
-    
+    X,y = data[:,1:], data[:,0]
+    dims = X.shape
+    dims = [int(x) for x in [dims[0], np.sqrt(dims[1]), np.sqrt(dims[1])]]
+    return X,y,dims
+
 
 class FashionMnistPreproc():
     def __init__(self):
@@ -148,8 +146,8 @@ class FashionMnistPreproc():
 
 def main():
     path = r'./data/fashion-mnist/fashion-mnist_train.csv'
-    data = prepare_data(path)
-    # model = SimplePytorchModel()
+    X,y,dims = prepare_data(path)
+    model = SimplePytorchModel(dims=dims)
     # datapipe = DataPipe()
 
     # pl.Trainer(
