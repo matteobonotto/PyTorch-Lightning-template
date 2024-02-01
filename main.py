@@ -17,6 +17,7 @@ class Conv2dEncoderBlock(nn.Module):
             out_channels: int = 1,
             kernel_size: int = 3):
         super(Conv2dEncoderBlock,self).__init__()   
+
         self.conv2d = nn.Conv2d(
             in_channels=in_channels, 
             out_channels=out_channels, 
@@ -32,7 +33,6 @@ class Conv2dEncoderBlock(nn.Module):
 class SimplePytorchModel(nn.Module):
     def __init__(
             self, 
-            dims: list,
             channel_in_list:list = [3,8,16],
             channel_out_list: list = [8,16,32]):
         super(SimplePytorchModel,self).__init__()
@@ -40,12 +40,13 @@ class SimplePytorchModel(nn.Module):
         module_list = []
 
         for in_channels, out_channels in zip(channel_in_list,channel_out_list):
-            module_list.append(self.Conv2dEncoderBlock(
+            module_list.append(Conv2dEncoderBlock(
                 in_channels=in_channels,
                 out_channels=out_channels
             ))
-        module_list.append([
-            nn.Linear(in_features=1, out_features=100),
+        module_list.extend([
+            nn.Flatten(),
+            nn.LazyLinear(out_features=100),
             nn.GELU(),
             nn.Linear(in_features=100, out_features=1),
             nn.GELU()
@@ -135,7 +136,7 @@ def prepare_data(path):
     X,y = data[:,1:], data[:,0]
     dims = X.shape
     dims = [int(x) for x in [dims[0], np.sqrt(dims[1]), np.sqrt(dims[1])]]
-    return X,y,dims
+    return (X,y)
 
 
 class FashionMnistPreproc():
@@ -146,8 +147,9 @@ class FashionMnistPreproc():
 
 def main():
     path = r'./data/fashion-mnist/fashion-mnist_train.csv'
-    X,y,dims = prepare_data(path)
-    model = SimplePytorchModel(dims=dims)
+    X,y = prepare_data(path)
+    model = SimplePytorchModel()
+    model.fit(X,y)
     # datapipe = DataPipe()
 
     # pl.Trainer(
