@@ -8,8 +8,7 @@ import time
 import matplotlib.pyplot as plt
 
 
-DEVICE = torch.device('cuda')
-DEVICE = torch.device('cpu')
+
 DTYPE = torch.float32
 
 class Conv2dEncoderBlock(nn.Module):
@@ -36,10 +35,11 @@ class SimplePytorchModel(nn.Module):
     def __init__(
             self, 
             channel_in_list:list = [1,8,16],
-            channel_out_list: list = [8,16,32]):
+            channel_out_list: list = [8,16,32],
+            device : str = 'cpu'):
         super(SimplePytorchModel,self).__init__()
 
-        self.device = DEVICE
+        self.device = torch.device(device)
         self.dtype = DTYPE
 
         module_list = []
@@ -56,7 +56,8 @@ class SimplePytorchModel(nn.Module):
             nn.Linear(in_features=100, out_features=10),
             nn.GELU()
         ])
-        self.layer_list = nn.ModuleList(module_list)
+        
+        self.layer_list = nn.ModuleList([l.to(self.device) for l in module_list])
 
 
     def forward(self,x):
