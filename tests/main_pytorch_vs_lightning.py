@@ -2,9 +2,9 @@ import numpy as np
 import pytorch_lightning as pl
 import time
 import pandas as pd
-# import sys
-# import os
-# sys.path.append(os.getcwd())
+import sys
+import os
+sys.path.append(os.getcwd())
 # from src.models import SimplePytorchModel
 
 from src.models.pytorch_model import SimplePytorchModel
@@ -14,12 +14,13 @@ from src.models.pl_model import SimplePytorchLightningModel
 from lightning import Trainer
 from lightning.pytorch.callbacks import TQDMProgressBar
 
-from src.utils import timer_func
+from src.utils import timer_func, CustomCli
 
 import torch
 
 import sys
 import os
+from omegaconf import OmegaConf
 sys.path.append(os.getcwd())
 os.system('export LD_LIBRARY_PATH=/usr/lib/wsl/lib:$LD_LIBRARY_PATH')
 
@@ -63,7 +64,15 @@ def run_pl_implementation(path):
 
 
 def main():
+    args = OmegaConf.from_cli()
     path = r'./data/fashion-mnist/fashion-mnist_train.csv'
+    cli = CustomCli(
+        model_class=SimplePytorchLightningModel(),
+        datamodule_class=FashionMnistDataLoader(path=path),
+        run=False,
+        parser_kwargs={"parser_mode": "omegaconf"},
+    )
+    
 
     ### Pytorch-lightning implementation
     run_pl_implementation(path)

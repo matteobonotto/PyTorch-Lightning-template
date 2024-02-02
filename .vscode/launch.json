@@ -18,7 +18,12 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "args": [
+                "-c", "./config/config_sample.yaml",
+                "prova1=True",
+                "prova2=10."
+            ]
         }
     ]
 }

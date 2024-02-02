@@ -1,5 +1,7 @@
 import time
 
+from lightning.pytorch.cli import LightningCLI 
+
 
 def timer_func(func):
     """
@@ -18,3 +20,8 @@ def timer_func(func):
         return result
     return wrapper
 
+
+
+class CustomCli(LightningCLI):
+    def add_arguments_to_parser(self, parser) -> None:
+        pass
