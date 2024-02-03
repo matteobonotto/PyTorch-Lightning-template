@@ -1,5 +1,5 @@
 import numpy as np
-import pytorch_lightning as pl
+# import pytorch_lightning as pl
 import time
 import pandas as pd
 import sys
@@ -20,7 +20,7 @@ import torch
 
 import sys
 import os
-from omegaconf import OmegaConf
+# from omegaconf import OmegaConf
 sys.path.append(os.getcwd())
 os.system('export LD_LIBRARY_PATH=/usr/lib/wsl/lib:$LD_LIBRARY_PATH')
 
@@ -64,7 +64,7 @@ def run_pl_implementation(path):
 
 
 def main():
-    args = OmegaConf.from_cli()
+    # args = OmegaConf.from_cli()
     path = r'./data/fashion-mnist/fashion-mnist_train.csv'
     cli = CustomCli(
         model_class=SimplePytorchLightningModel(),
