@@ -1,19 +1,11 @@
+model:
+  channel_in_list: [1,8,16]
+  channel_out_list: [8, 16, 32]
+  linear_in_features: 100
+
 data:
+  path: ./data/fashion-mnist/fashion-mnist_train.csv
+  batch_size: 64
+  shuffle: true
+  num_workers: 0
 
-  task: NavierStokes2D
-  data_dir: null
-  time_history: 4
-  time_future: 1
-  time_gap: 0
-  pde:
-      n_scalar_components: 1
-      n_vector_components: 1
-      trajlen: 14
-      n_spatial_dim: 2
-
-  batch_size: 8
-  pin_memory: True
-  num_workers: 1
-  train_limit_trajectories: -1
-  valid_limit_trajectories: -1
-  test_limit_trajectories: -1

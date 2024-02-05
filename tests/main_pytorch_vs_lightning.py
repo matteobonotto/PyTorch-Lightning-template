@@ -8,7 +8,7 @@ sys.path.append(os.getcwd())
 # from src.models import SimplePytorchModel
 
 from src.models.pytorch_model import SimplePytorchModel
-from src.dataloaders.mnist_dataloader import FashionMnistDataLoader
+from src.dataloaders.mnist_dataloader import FashionMnistDataLoader, UserLightningDataModule
 from src.models.pl_model import SimplePytorchLightningModel 
 
 from lightning import Trainer
@@ -44,42 +44,56 @@ def run_craft_implementation(path):
 def run_pl_implementation(path):
 
     # Initialize a trainer
-    trainer = Trainer(
-        accelerator="cuda",
-        max_epochs=20,
-        # callbacks=[TQDMProgressBar(refresh_rate=250)],
-        # enable_model_summary=False,
-        barebones=True,
-        # enable_checkpointing=False
-    )
+    # trainer = Trainer(
+    #     accelerator="cuda",
+    #     max_epochs=20,
+    #     # callbacks=[TQDMProgressBar(refresh_rate=250)],
+    #     # enable_model_summary=False,
+    #     barebones=True,
+    #     # enable_checkpointing=False
+    # )
 
-    trainer.fit(
-        SimplePytorchLightningModel(), 
-        FashionMnistDataLoader(
-            path=path,
-            num_workers=num_workers
-            )
+    # trainer.fit(
+    #     SimplePytorchLightningModel(), 
+    #     FashionMnistDataLoader(
+    #         path=path,
+    #         num_workers=num_workers
+    #         )
+    #     )
+    
+    cli = CustomCli(
+        model_class=SimplePytorchLightningModel,
+        datamodule_class=UserLightningDataModule,
+        run=False,
+        parser_kwargs={"parser_mode": "omegaconf"},
+    )
+    cli.trainer.fit(
+        cli.model, 
+        datamodule=cli.datamodule
         )
 
 
 
 def main():
     # args = OmegaConf.from_cli()
-    path = r'./data/fashion-mnist/fashion-mnist_train.csv'
     cli = CustomCli(
-        model_class=SimplePytorchLightningModel(),
-        datamodule_class=FashionMnistDataLoader(path=path),
+        model_class=SimplePytorchLightningModel,
+        datamodule_class=UserLightningDataModule,
         run=False,
         parser_kwargs={"parser_mode": "omegaconf"},
     )
     
 
     ### Pytorch-lightning implementation
-    run_pl_implementation(path)
+    run_pl_implementation(
+        path = r'./data/fashion-mnist/fashion-mnist_train.csv'
+        )
 
 
     ### Craft implementation    
-    run_craft_implementation(path)
+    run_craft_implementation(
+        path = r'./data/fashion-mnist/fashion-mnist_train.csv'
+        )
     
 
 

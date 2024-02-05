@@ -37,9 +37,11 @@ class Conv2dEncoderBlock(L.LightningModule):
 class SimplePytorchLightningModel(L.LightningModule):
     def __init__(
             self, 
-            channel_in_list : list = [1,8,16],
-            channel_out_list : list = [8,16,32]):
+            channel_in_list : list,
+            channel_out_list : list,
+            linear_in_features: int):
         super(SimplePytorchLightningModel,self).__init__()
+        # self.save_hyperparameters() #for model checkpointing
 
         module_list = []
 
@@ -48,11 +50,12 @@ class SimplePytorchLightningModel(L.LightningModule):
                 in_channels=in_channels,
                 out_channels=out_channels
             ))
+
         module_list.extend([
             nn.Flatten(),
-            nn.LazyLinear(out_features=100),
+            nn.LazyLinear(out_features=linear_in_features),
             nn.GELU(),
-            nn.Linear(in_features=100, out_features=10),
+            nn.Linear(in_features=linear_in_features, out_features=10),
             nn.GELU()
         ])
         self.layer_list = nn.ModuleList(module_list)

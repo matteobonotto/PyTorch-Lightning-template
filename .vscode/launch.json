@@ -24,6 +24,17 @@
                 "prova1=True",
                 "prova2=10."
             ]
+        },
+        {
+            "name": "test CLI",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "args": [
+                "-c", "./config/config_sample.yaml",
+            ]
         }
     ]
 }
