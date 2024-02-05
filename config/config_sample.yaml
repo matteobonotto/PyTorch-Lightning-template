@@ -11,8 +11,10 @@ data:
 
 trainer:
   accelerator: 'gpu'
-  callbacks: [src.callbacks.custom_calbacks.CustomCallback]
+  callbacks: 
+    - class_path: src.callbacks.custom_callbacks.CustomCallback
+      init_args:
+        refresh_rate: 250
 
-CustomCallback:
-  refresh_rate: 250
+
 
