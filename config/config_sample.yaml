@@ -9,3 +9,6 @@ data:
   shuffle: true
   num_workers: 0
 
+trainer:
+  accelerator: 'gpu'
+
