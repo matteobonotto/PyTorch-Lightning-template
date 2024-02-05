@@ -19,9 +19,12 @@ def main():
     cli = CustomCli(
         model_class=SimplePytorchLightningModel,
         datamodule_class=UserLightningDataModule,
-        run=False,
-        parser_kwargs={"parser_mode": "omegaconf"},
-    )
+        run=False
+        )
+    cli.trainer.fit(
+        cli.model, 
+        datamodule=cli.datamodule
+        )
     
     
 
