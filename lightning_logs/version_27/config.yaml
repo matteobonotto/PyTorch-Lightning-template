@@ -1,5 +1,5 @@
 # lightning.pytorch==2.1.4
-seed_everything: 2888895622
+seed_everything: 4063056908
 trainer:
   accelerator: gpu
   strategy: auto
