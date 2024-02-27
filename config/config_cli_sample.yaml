@@ -5,7 +5,7 @@ model:
 
 data:
   path: ./data/fashion-mnist/fashion-mnist_train.csv
-  batch_size: 64
+  batch_size: 512
   shuffle: true
   num_workers: 0
 
@@ -15,6 +15,7 @@ trainer:
   strategy: "auto"
   max_epochs: "20"
   # precision: "bf16"
+  # pin_memory: True
   callbacks: 
     - class_path: src.callbacks.custom_callbacks.CustomCallback
       init_args:

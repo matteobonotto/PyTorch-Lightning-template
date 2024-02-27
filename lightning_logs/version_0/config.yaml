@@ -1,5 +1,5 @@
 # lightning.pytorch==2.1.4
-seed_everything: 1219115092
+seed_everything: 1888911980
 trainer:
   accelerator: gpu
   strategy: auto
@@ -55,6 +55,6 @@ model:
   linear_in_features: 100
 data:
   path: ./data/fashion-mnist/fashion-mnist_train.csv
-  batch_size: 64
+  batch_size: 512
   shuffle: true
   num_workers: 0
