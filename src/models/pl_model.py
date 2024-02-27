@@ -72,6 +72,10 @@ class SimplePytorchLightningModel(L.LightningModule):
     def training_step(self, batch):
         x, y = batch
         return self.loss(self(x),y)
+    
+    
+    # def validation_step(self, batch):
+    #     raise(NotImplementedError)
 
 
     def configure_optimizers(self):

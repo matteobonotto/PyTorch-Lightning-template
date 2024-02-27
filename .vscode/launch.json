@@ -12,28 +12,41 @@
             "console": "integratedTerminal",
             "justMyCode": true
         },
+        // {
+        //     "name": "main",
+        //     "type": "python",
+        //     "request": "launch",
+        //     "program": "${file}",
+        //     "console": "integratedTerminal",
+        //     "justMyCode": true,
+        //     "args": [
+        //         "-c", "./config/config_sample.yaml",
+        //         "prova1=True",
+        //         "prova2=10."
+        //     ]
+        // },
         {
             "name": "main",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": [
-                "-c", "./config/config_sample.yaml",
-                "prova1=True",
-                "prova2=10."
+                "--c", "./config/config_sample.yaml",
+                "--prova_config_1",
+                "--prova_config_2", "10"
             ]
         },
         {
             "name": "test CLI",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": "${workspaceFolder}/main_cli.py",
             "console": "integratedTerminal",
             "justMyCode": false,
             "args": [
-                "-c", "./config/config_sample.yaml",
+                "-c", "./config/config_cli_sample.yaml",
             ]
         }
     ]
