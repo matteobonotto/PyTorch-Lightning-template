@@ -4,8 +4,8 @@ model:
   linear_in_features: 100
 
 data:
-  path: ./data/fashion-mnist/fashion-mnist_train.csv
-  batch_size: 512
+  path: ./data/fashion-mnist/fashion-mnist_196x196_train.h5 
+  batch_size: 128
   shuffle: true
   num_workers: 0
 
@@ -19,7 +19,7 @@ trainer:
   callbacks: 
     - class_path: src.callbacks.custom_callbacks.CustomCallback
       init_args:
-        refresh_rate: 250
+        refresh_rate: 50
 
 
 
