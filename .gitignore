@@ -11,7 +11,7 @@ data/fashion-mnist/fashion-mnist_224x224_test.h5
 
 
 # lightning_logs
-lightning_logs/
+./lightning_logs/*
 
 # large datasets
 data/fashion-mnist/fashion-mnist_224x224_train.h5
