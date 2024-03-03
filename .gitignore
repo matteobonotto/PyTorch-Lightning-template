@@ -8,7 +8,7 @@ data/fashion-mnist/fashion-mnist_224x224_test.h5
 # experimentations
 ./notebooks/save_test/*
 
-
+*.pyc 
 
 # lightning_logs
 ./lightning_logs/*
