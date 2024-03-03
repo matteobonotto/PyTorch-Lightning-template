@@ -65,3 +65,6 @@ data/fashion-mnist/fashion-mnist_224x224_test.h5
 .Trashes
 ehthumbs.db
 Thumbs.db
+data/fashion-mnist/fashion-mnist_train.csv
+data/fashion-mnist/fashion-mnist_test.csv
+data/.DS_Store

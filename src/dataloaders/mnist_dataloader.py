@@ -23,10 +23,10 @@ class UserTrainDataset(Dataset):
 
         # load and prepare data
         data = read_h5_numpy(self.path)
-        X = data['X']/255
+        X = data['X'] 
         y = data['y']
 
-        self.X = torch.tensor(X,dtype=DTYPE).unsqueeze(1)
+        self.X = torch.tensor(X,dtype=DTYPE).unsqueeze(1)/255
         self.y = torch.tensor(y.ravel(),dtype=torch.int64)
 
     def __getitem__(self, idx):

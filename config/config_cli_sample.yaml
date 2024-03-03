@@ -4,7 +4,7 @@ model:
   linear_in_features: 150
 
 data:
-  path: ./data/fashion-mnist/fashion-mnist_28x28_train.h5 
+  path: ./data/fashion-mnist/fashion-mnist_196x196_train.h5 
   batch_size: 128
   shuffle: true
   num_workers: 0
