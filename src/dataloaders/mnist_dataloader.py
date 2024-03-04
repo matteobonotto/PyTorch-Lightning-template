@@ -8,7 +8,8 @@ from torch.utils.data import TensorDataset
 import pandas as pd
 from typing import Optional
 from helper_functions.data import read_h5_numpy
-
+import torchdata.datapipes as dp
+from helper_functions.data import read_h5_numpy
 
 # import matplotlib.pyplot as plt
 
@@ -16,24 +17,37 @@ DTYPE = torch.float32
 
 
 
-class UserTrainDataset(Dataset):
+
+class MNISTBulkDataset(Dataset):
     def __init__(self,path : str):
-        super(UserTrainDataset,self).__init__()
+        super(MNISTBulkDataset,self).__init__()
         self.path = path
 
         # load and prepare data
         data = read_h5_numpy(self.path)
-        X = data['X'] 
-        y = data['y']
-
-        self.X = torch.tensor(X,dtype=DTYPE).unsqueeze(1)/255
-        self.y = torch.tensor(y.ravel(),dtype=torch.int64)
+        self.X = torch.tensor(data['X'] ,dtype=DTYPE).unsqueeze(1)
+        self.y = torch.tensor(data['y'] .ravel(),dtype=torch.int64)
+        del data
 
     def __getitem__(self, idx):
-        return self.X[idx, ...], self.y[idx, ...]
+        return self.X[idx, ...]/255, self.y[idx, ...]
     
     def __len__(self):
         return self.y.shape[0]
+    
+
+
+class MNISTStreamDataset(dp.iter.IterDataPipe):
+    def __init__(self, path : str):
+        super(MNISTStreamDataset,self).__init__()
+        self.path = path
+
+    def __iter__(self):
+        data = read_h5_numpy(self.path)
+        X = torch.tensor(data['X'] ,dtype=DTYPE).unsqueeze(1)/255
+        y = torch.tensor(data['y'] .ravel(),dtype=torch.int64)
+        yield X, y
+
     
 
 class UserLightningDataModule(LightningDataModule):
@@ -50,7 +64,7 @@ class UserLightningDataModule(LightningDataModule):
         self.num_workers = num_workers
 
     def setup(self, stage: Optional[str] = None):
-        self.train_dataset = UserTrainDataset(path = self.path)
+        self.train_dataset = MNISTBulkDataset(path = self.path)
            
     def train_dataloader(self):
         return DataLoader(
