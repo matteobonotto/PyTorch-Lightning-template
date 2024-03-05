@@ -4,7 +4,7 @@ from lightning import Trainer
 from src.utils import timer_func
 from lightning.pytorch.callbacks import TQDMProgressBar
 from src.models.pl_model import SimplePytorchLightningModel 
-from src.dataloaders.mnist_dataloader import FashionMnistDataLoader
+from src.old_dataloaders.mnist_main_dataloader import FashionMnistDataLoader
 from lightning.pytorch.accelerators import find_usable_cuda_devices
 from argparse import ArgumentParser
 from omegaconf import OmegaConf

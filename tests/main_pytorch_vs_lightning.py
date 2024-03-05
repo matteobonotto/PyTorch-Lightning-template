@@ -8,7 +8,7 @@ sys.path.append(os.getcwd())
 # from src.models import SimplePytorchModel
 
 from src.models.pytorch_model import SimplePytorchModel
-from src.dataloaders.mnist_dataloader import FashionMnistDataLoader, UserLightningDataModule
+from src.old_dataloaders.mnist_main_dataloader import FashionMnistDataLoader, UserLightningDataModule
 from src.models.pl_model import SimplePytorchLightningModel 
 
 from lightning import Trainer

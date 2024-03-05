@@ -3,8 +3,8 @@ import sys
 
 import torch 
 
-from src.dataloaders.mnist_dataloader import UserLightningDataModule
-from src.models.pl_model import SimplePytorchLightningModel 
+from src.datamodules.mnist_dataloader import BaseDataModule
+from src.models.pl_model import BaseModel 
 from src.utils import timer_func, CustomCli
 
 
@@ -18,8 +18,8 @@ torch.set_float32_matmul_precision("high")
 @timer_func
 def main():
     cli = CustomCli(
-        model_class=SimplePytorchLightningModel,
-        datamodule_class=UserLightningDataModule,
+        model_class=BaseModel,
+        datamodule_class=BaseDataModule,
         run=False
         )
     cli.trainer.fit(
