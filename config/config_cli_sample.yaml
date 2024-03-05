@@ -4,7 +4,7 @@ model:
   linear_in_features: 150
 
 data:
-  path: ./data/fashion-mnist_175x175_train.h5 
+  path: ./data/fashion-mnist_125x125_train.h5  #./data/fashion-mnist_125x125_train.h5 
   batch_size: 128
   shuffle: true
   num_workers: 0
@@ -14,7 +14,7 @@ trainer:
   devices: "1"
   strategy: "auto"
   max_epochs: "20"
-  # precision: "bf16"
+  precision: "bf16"
   # pin_memory: True
   callbacks: 
     - class_path: src.callbacks.custom_callbacks.CustomCallback
