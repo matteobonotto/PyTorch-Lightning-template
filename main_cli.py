@@ -3,7 +3,7 @@ import sys
 
 import torch 
 
-from src.datamodules.mnist_dataloader import BaseDataModule
+from src.data.datamodules import BaseDataModule
 from src.models.pl_model import BaseModel 
 from src.utils import timer_func, CustomCli
 

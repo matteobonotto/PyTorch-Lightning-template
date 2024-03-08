@@ -27,7 +27,8 @@ class BaseDataModule(LightningDataModule):
             datapipe_type : 'str', 
             batch_size : int = 32,
             shuffle : bool = False,
-            num_workers : int = 0):
+            num_workers : int = 0
+            ):
         super(BaseDataModule,self).__init__()
         self.path = path
         self.batch_size = batch_size

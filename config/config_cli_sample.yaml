@@ -9,16 +9,16 @@ model:
 
 data:
   path: 
-    # train: ./data/fashion-mnist/train/
-    # val: ./data/fashion-mnist/val/
-    # test: ./data/fashion-mnist/test/
-    train: ./data/fashion-mnist_125x125_train.h5  #./data/fashion-mnist_125x125_train.h5 
-    val: ./data/fashion-mnist_125x125_val.h5  
-    test: ./data/fashion-mnist_125x125_test.h5
-  datapipe_type: 'BulkDataPipe' # StreamDataPipe
-  batch_size: 128
+    train: ./data/fashion-mnist/train/
+    val: ./data/fashion-mnist/val/
+    test: ./data/fashion-mnist/test/
+    # train: ./data/fashion-mnist_125x125_train.h5  #./data/fashion-mnist_125x125_train.h5 
+    # val: ./data/fashion-mnist_125x125_val.h5  
+    # test: ./data/fashion-mnist_125x125_test.h5
+  datapipe_name: 'MNIST' # StreamDataPipe
+  batch_size: 64
   shuffle: true
-  num_workers: 0
+  num_workers: 1
 
 trainer:
   accelerator: 'gpu'
