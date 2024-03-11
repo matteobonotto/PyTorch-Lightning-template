@@ -7,18 +7,43 @@ model:
   #   linear_in_features: 150
   loss_name: 'CrossEntropy'
 
+# data:
+#   # path: 
+#   #   train: ./data/fashion-mnist_125x125_train.h5  #./data/fashion-mnist_125x125_train.h5 
+#   #   val: ./data/fashion-mnist_125x125_val.h5  
+#   #   test: ./data/fashion-mnist_125x125_test.h5
+#   # datapipe: ['MNIST', 'BulkDataPipe'] # IterDataPipe, 'BulkDataPipe'
+#   # batch_size: 64
+#   # collate: false
+#   path: 
+#     train: ./data/fashion-mnist-refined/train/
+#     val: ./data/fashion-mnist-refined/val/
+#     test: ./data/fashion-mnist-refined/test/
+#   datapipe: ['MNIST', 'IterDataPipe'] # IterDataPipe, 'BulkDataPipe'
+#   collate: false # not required for IterDataPipe
+#   batch_size: 64
+#   shuffle: true
+#   num_workers: 20
+#   pin_memory: True
+
 data:
+  # path: 
+  #   train: ./data/fashion-mnist_28x28_train.h5  #./data/fashion-mnist_125x125_train.h5 
+  #   val: ./data/fashion-mnist_28x28_val.h5  
+  #   test: ./data/fashion-mnist_28x28_test.h5
+  # datapipe: ['MNIST', 'BulkDataPipe'] # IterDataPipe, 'BulkDataPipe'
+  # batch_size: 64
+  # collate: false
   path: 
-    train: ./data/fashion-mnist/train/
-    val: ./data/fashion-mnist/val/
-    test: ./data/fashion-mnist/test/
-    # train: ./data/fashion-mnist_125x125_train.h5  #./data/fashion-mnist_125x125_train.h5 
-    # val: ./data/fashion-mnist_125x125_val.h5  
-    # test: ./data/fashion-mnist_125x125_test.h5
-  datapipe_name: 'MNIST' # StreamDataPipe
+    train: ./data/fashion-mnist-original/train/
+    val: ./data/fashion-mnist-original/val/
+    test: ./data/fashion-mnist-original/test/
+  datapipe: ['MNIST', 'IterDataPipe'] # IterDataPipe, 'BulkDataPipe'
+  collate: false # not required for IterDataPipe
   batch_size: 64
   shuffle: true
-  num_workers: 1
+  num_workers: 20
+  pin_memory: True
 
 trainer:
   accelerator: 'gpu'
@@ -26,11 +51,13 @@ trainer:
   strategy: "auto"
   max_epochs: "20"
   # precision: "bf16"
-  # pin_memory: True
   callbacks: 
-    - class_path: src.callbacks.custom_callbacks.CustomCallback
+    # - class_path: src.callbacks.custom_callbacks.CustomCallback
+    #   init_args:
+    #     refresh_rate: 20
+    - class_path: lightning.pytorch.callbacks.TQDMProgressBar
       init_args:
-        refresh_rate: 50
+        refresh_rate: 20
 
 
 

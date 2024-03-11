@@ -3,39 +3,46 @@ import lightning as L
 from typing import Optional, Callable
 from torch.utils.data import DataLoader
 import torchdata.datapipes as dp
+import torch
+from lightning.pytorch.cli import instantiate_class 
 
 from src.data.registry import DATAPIPE_REGISTRY
 
 print('here')
 
+def collate_fun(batch):
+    # Assuming pairs
+    b1 = torch.cat([b[0] for b in batch], dim=0)
+    b2 = torch.cat([b[1] for b in batch], dim=0)
+    return b1, b2
+
+
+
 class BaseDataModule(L.LightningDataModule):
     def __init__(
             self,
             path,
-            datapipe_name : 'str', 
+            datapipe : list[str], 
             batch_size : int = 32,
             shuffle : bool = False,
             num_workers : int = 0,
-            pin_memory : bool = False
+            pin_memory : bool = False,
+            collate : bool = False
             ):
         super(BaseDataModule,self).__init__()
         self.path = path
-        self.datapipe_name = datapipe_name
+        self.datapipe = datapipe
         self.num_workers = num_workers
         self.pin_memory = pin_memory
         self.batch_size = batch_size
+        self.collate_fun = collate_fun if collate else None
+        self.shuffle = shuffle
 
     def setup(self, stage: Optional[str] = None):
-        dps = DATAPIPE_REGISTRY[self.datapipe_name]
-        self.train_dp = dps["train"](
-            data_path=self.path['train'],
-        )
-        self.valid_dp = dps["valid"](
-            data_path=self.path['val'],
-        )
-        self.test_dp = dps["test"](
-            data_path=self.path['test'],
-        )
+        dps = DATAPIPE_REGISTRY[self.datapipe[0]]
+        self.train_dp = dps[self.datapipe[1]]["train"](data_path=self.path['train'])
+        self.valid_dp = dps[self.datapipe[1]]["valid"](data_path=self.path['val'])
+        self.test_dp = dps[self.datapipe[1]]["test"](data_path=self.path['test'])
 
     def train_dataloader(self):
         return DataLoader(
@@ -45,7 +52,7 @@ class BaseDataModule(L.LightningDataModule):
             batch_size=self.batch_size,
             shuffle=True,
             drop_last=True,
-            # collate_fn=collate_function,
+            collate_fn=self.collate_fun,
         )
 
     def val_dataloader(self):
@@ -55,7 +62,7 @@ class BaseDataModule(L.LightningDataModule):
             pin_memory=self.pin_memory,
             batch_size=self.batch_size,
             shuffle=False,
-            # collate_fn=collate_function,
+            collate_fn=self.collate_fun,
         )
 
 
@@ -66,7 +73,7 @@ class BaseDataModule(L.LightningDataModule):
             pin_memory=self.pin_memory,
             batch_size=self.batch_size,
             shuffle=False,
-            # collate_fn=collate_function,
+            collate_fn=self.collate_fun,
         )
 
 

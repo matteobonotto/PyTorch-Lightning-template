@@ -7,8 +7,17 @@ import h5py
 from torchdata.datapipes.iter import IterDataPipe
 import numpy as np
 # from helper_functions.helper_functions.data import read_h5_numpy
+from torch.utils.data import Dataset
+import os
+import torchvision.transforms as transforms
 
 
+transform = transforms.Compose([
+    # transforms.RandomResizedCrop(125, scale=(0.2, 1.0), interpolation=3),  # 3 is bicubic
+    # transforms.RandomHorizontalFlip(),
+    # transforms.ToTensor(),
+    transforms.Normalize(mean=(255/2),std=(255/2))
+    ])
 
 def read_h5_numpy(
         filename : str, 
@@ -34,27 +43,34 @@ def hdf5_to_dict(h5_file):
 class MnistDatasetOpener(IterDataPipe):
     def __init__(
             self,
-            dp : IterDataPipe):
+            dp : IterDataPipe,
+            transform = None 
+            ):
         super(MnistDatasetOpener,self).__init__()
         self.dp = dp
+        self.transform = transform
+
+    def __len__(self):
+        return len(os.listdir(self.dp))
 
     def __iter__(self):
         for path in self.dp:
             data = read_h5_numpy(path)
 
             for idx in range(data['y'].shape[0]):
-                X = torch.tensor(data['X'][idx, ...])/255
-                y = torch.tensor(data['y'][idx, ...])
+                X = torch.tensor(data['X'][idx, ...], dtype=torch.float32).unsqueeze(0)
+                if self.transform:
+                    X = self.transform(X)            
+                y = torch.tensor(data['y'][idx, ...],dtype=torch.int64)#.unsqueeze(0)
                 yield X, y
 
 
-
-
-def build_datapipes(
+def build_iter_datapipes(
     data_path,
     dataset_opener: Callable[..., IterDataPipe],
     lister: Callable[..., IterDataPipe],
     sharder: Callable[..., IterDataPipe],
+    transform,
     mode: str,
 ):
     """Build datapipes for training and evaluation.
@@ -79,23 +95,44 @@ def build_datapipes(
 
     dpipe = dataset_opener(
         sharder(dpipe),
+        transform = transform
     )
 
     return dpipe
 
 
-train_datapipe_mnist = functools.partial(
-    build_datapipes,
+class MNISTBulkDataPipe(Dataset):
+    def __init__(self, data_path, transform = None, **kwargs):
+        super(MNISTBulkDataPipe,self).__init__()
+        data = read_h5_numpy(data_path)
+        self.X = data['X']
+        self.y = data['y']
+        self.transform = transform
+
+    def __len__(self):
+        return self.y.shape[0]
+
+    def __getitem__(self, idx):
+        X = torch.tensor(self.X[idx,...], dtype=torch.float32).unsqueeze(0)
+        if self.transform:
+            X = self.transform(X)            
+        y = torch.tensor(self.y[idx],dtype=torch.int64)
+        return X, y
+
+
+
+train_IterDataPipe_mnist = functools.partial(
+    build_iter_datapipes,
     dataset_opener=MnistDatasetOpener,
     lister=dp.iter.FileLister,
     sharder=dp.iter.ShardingFilter,
+    transform = transform,
     mode="train",
 )
 
-
-
-
-
+train_BulkDataPipe_mnist = functools.partial(
+    MNISTBulkDataPipe,
+    transform=transform)
 
 
 

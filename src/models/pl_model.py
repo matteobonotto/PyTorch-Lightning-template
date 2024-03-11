@@ -33,6 +33,7 @@ class BaseModel(L.LightningModule):
     def __init__(
             self,
             model_name : str,
+            # class_path : str,
             loss_name : str
             ):
         super(BaseModel,self).__init__()
