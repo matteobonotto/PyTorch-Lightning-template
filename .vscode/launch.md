@@ -1,0 +1,1 @@
+python main_cli.py -c ./config/config_cli_sample.yaml

@@ -38,7 +38,7 @@ def hdf5_to_dict(h5_file):
     d = dict()
     return read_hdf5_file(h5_file)
 
-
+from lightning.pytorch import callbacks
 
 class MnistDatasetOpener(IterDataPipe):
     def __init__(
@@ -51,7 +51,9 @@ class MnistDatasetOpener(IterDataPipe):
         self.transform = transform
 
     def __len__(self):
-        return len(os.listdir(self.dp))
+        # NOTE: assuming all chunks with the same number of files inside
+        sample_file = read_h5_numpy(next(iter(self.dp)))
+        return sample_file['X'].shape[0]*len([p for p in self.dp])
 
     def __iter__(self):
         for path in self.dp:

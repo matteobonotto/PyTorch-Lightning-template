@@ -8,8 +8,6 @@ from lightning.pytorch.cli import instantiate_class
 
 from src.data.registry import DATAPIPE_REGISTRY
 
-print('here')
-
 def collate_fun(batch):
     # Assuming pairs
     b1 = torch.cat([b[0] for b in batch], dim=0)
@@ -27,7 +25,8 @@ class BaseDataModule(L.LightningDataModule):
             shuffle : bool = False,
             num_workers : int = 0,
             pin_memory : bool = False,
-            collate : bool = False
+            collate : bool = False,
+            persistent_workers : bool = False
             ):
         super(BaseDataModule,self).__init__()
         self.path = path
@@ -37,6 +36,7 @@ class BaseDataModule(L.LightningDataModule):
         self.batch_size = batch_size
         self.collate_fun = collate_fun if collate else None
         self.shuffle = shuffle
+        self.persistent_workers = persistent_workers
 
     def setup(self, stage: Optional[str] = None):
         dps = DATAPIPE_REGISTRY[self.datapipe[0]]
@@ -53,6 +53,7 @@ class BaseDataModule(L.LightningDataModule):
             shuffle=True,
             drop_last=True,
             collate_fn=self.collate_fun,
+            persistent_workers = self.persistent_workers
         )
 
     def val_dataloader(self):
@@ -63,6 +64,7 @@ class BaseDataModule(L.LightningDataModule):
             batch_size=self.batch_size,
             shuffle=False,
             collate_fn=self.collate_fun,
+            persistent_workers = self.persistent_workers
         )
 
 
@@ -74,6 +76,7 @@ class BaseDataModule(L.LightningDataModule):
             batch_size=self.batch_size,
             shuffle=False,
             collate_fn=self.collate_fun,
+            persistent_workers = self.persistent_workers
         )
 
 
