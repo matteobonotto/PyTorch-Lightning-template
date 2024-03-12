@@ -23,7 +23,7 @@ data:
   datapipe: ['MNIST', 'IterDataPipe'] # IterDataPipe, 'BulkDataPipe'
   collate: false # not required for IterDataPipe
   batch_size: 64
-  num_workers: 10
+  num_workers: 20
   persistent_workers: True
 
 # data:
