@@ -40,6 +40,7 @@ class BaseModel(L.LightningModule):
 
         self.model = get_model(model_name)
         self.loss = get_loss(loss_name)
+        # self.val_metrics = self.model.val_metrics
         
         # TODO make val_criteria/test_criteria agnostic
         # self.val_criteria = { 
@@ -56,17 +57,33 @@ class BaseModel(L.LightningModule):
 
     def training_step(self, batch):
         x, y = batch
-        return self.loss(self(x),y)
+        loss = self.loss(self(x),y)
+        self.log('train_loss', loss, on_step=True, on_epoch=True, logger=True)
+        return loss
     
     def validation_step(self, batch):
         x, y = batch
         pred = self(x)
-        return self.model.val_metric(pred,y)
+        # val_metric = self.accuracy(pred,y)
+        val_metrics = {}
+        for k,v in self.model.val_metrics.items():
+            val_metrics.update({
+                k : v(pred,y)
+            })
+            self.log(k, val_metrics[k], prog_bar=True)
+        return val_metrics
 
-    # def test_step(self, batch):
-    #     x, y = batch
-    #     pred = self(x)
-    #     return {k:v(pred,y) for k,v in self.test_criteria.items()}
+    def test_step(self, batch):
+        x, y = batch
+        pred = self(x)
+        # val_metric = self.accuracy(pred,y)
+        test_metrics = {}
+        for k,v in self.model.test_metrics.items():
+            test_metrics.update({
+                k : v(pred,y)
+            })
+            self.log(k, test_metrics[k], prog_bar=True)
+        return test_metrics
 
 
     def configure_optimizers(self):

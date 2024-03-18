@@ -63,8 +63,14 @@ class conv2d_classif(L.LightningModule):
 
         self.loss = UserCrossEntropyLoss()
 
-        self.val_metric = Accuracy(task="multiclass", num_classes=10)
-        self.test_metric = Accuracy(task="multiclass", num_classes=10)
+        self.val_metrics = nn.ModuleDict({
+            'val_loss' : UserCrossEntropyLoss(),
+            'val_acc' : Accuracy(task="multiclass", num_classes=10)
+        })
+        self.test_metrics = nn.ModuleDict({
+            'test_loss' : UserCrossEntropyLoss(),
+            'test_acc' : Accuracy(task="multiclass", num_classes=10)
+        })
 
 
     def forward(self,x):

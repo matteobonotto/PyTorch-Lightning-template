@@ -51,9 +51,12 @@ trainer:
   accelerator: 'gpu'
   devices: "1"
   strategy: "auto"
-  max_epochs: 2
+  max_epochs: 20
   # precision: "bf16"
-  logger: lightning.pytorch.loggers.WandbLogger
+  logger: 
+    - class_path: lightning.pytorch.loggers.WandbLogger
+      init_args:
+        project: "lightning-template"
     # init_args:
       # log_model: "all"
     #   project: "lightning-template"

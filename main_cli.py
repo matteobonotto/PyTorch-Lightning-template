@@ -21,7 +21,8 @@ def main():
     cli = CustomCli(
         model_class=BaseModel,
         datamodule_class=BaseDataModule,
-        run=False
+        run=False,
+        save_config_kwargs={"overwrite": True} # otherwise error from wandb (Aborting to avoid overwriting results of a previous run)
         )
     cli.trainer.fit(
         cli.model, 

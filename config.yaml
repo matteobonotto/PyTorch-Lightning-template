@@ -1,5 +1,5 @@
 # lightning.pytorch==2.1.4
-seed_everything: 3078382672
+seed_everything: 2324498306
 trainer:
   accelerator: gpu
   strategy: auto
@@ -7,7 +7,7 @@ trainer:
   num_nodes: 1
   precision: null
   logger:
-    class_path: lightning.pytorch.loggers.WandbLogger
+  - class_path: lightning.pytorch.loggers.WandbLogger
     init_args:
       name: null
       save_dir: .
@@ -16,7 +16,7 @@ trainer:
       dir: null
       id: null
       anonymous: null
-      project: null
+      project: lightning-template
       log_model: false
       experiment: null
       prefix: ''
@@ -49,7 +49,7 @@ trainer:
     init_args:
       max_depth: -1
   fast_dev_run: false
-  max_epochs: 2
+  max_epochs: 20
   min_epochs: null
   max_steps: -1
   min_steps: null
