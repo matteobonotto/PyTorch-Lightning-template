@@ -7,6 +7,7 @@ from src.data.datamodules import BaseDataModule
 from src.models.pl_model import BaseModel 
 from src.utils import timer_func, CustomCli
 
+from lightning.pytorch.loggers import WandbLogger
 
 ###
 sys.path.append(os.getcwd())

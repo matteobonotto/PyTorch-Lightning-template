@@ -52,6 +52,7 @@ trainer:
   strategy: "auto"
   max_epochs: 2
   # precision: "bf16"
+  # logger: WandbLogger
   callbacks: 
     # - class_path: src.callbacks.custom_callbacks.CustomCallback
     #   init_args:
