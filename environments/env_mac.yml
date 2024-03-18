@@ -71,7 +71,7 @@ dependencies:
       - frozenlist==1.4.1
       - fsspec==2024.2.0
       - h5py==3.10.0
-      - helper-functions==0.1.0
+      # - helper-functions==0.1.0
       - idna==3.6
       - importlib-resources==6.1.2
       - jinja2==3.1.3
