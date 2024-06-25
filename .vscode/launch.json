@@ -1,0 +1,53 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        // {
+        //     "name": "main",
+        //     "type": "python",
+        //     "request": "launch",
+        //     "program": "${file}",
+        //     "console": "integratedTerminal",
+        //     "justMyCode": true,
+        //     "args": [
+        //         "-c", "./config/config_sample.yaml",
+        //         "prova1=True",
+        //         "prova2=10."
+        //     ]
+        // },
+        {
+            "name": "main",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--c", "./config/config_sample.yaml",
+                "--prova_config_1",
+                "--prova_config_2", "10"
+            ]
+        },
+        {
+            "name": "test CLI",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main_cli.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "args": [
+                "-c", "./config/config_cli_sample.yaml",
+            ]
+        }
+    ]
+}
